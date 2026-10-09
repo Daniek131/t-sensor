@@ -1,0 +1,29 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: tsensor
+      POSTGRES_USER: tsensor
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}
+    volumes:
+      - database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tsensor -d tsensor"]
+      interval: 5s
+      retries: 10
+  api:
+    build: .
+    environment:
+      DATABASE_URL: postgresql+psycopg://tsensor:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD}@db/tsensor
+      API_TOKEN: ${API_TOKEN:?Set API_TOKEN}
+      TS_PH_DIVISOR: ${TS_PH_DIVISOR:-100}
+      TS_MOISTURE_DIVISOR: ${TS_MOISTURE_DIVISOR:-10}
+      TS_TEMPERATURE_DIVISOR: ${TS_TEMPERATURE_DIVISOR:-10}
+    ports:
+      - "127.0.0.1:8001:8001"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  database:
