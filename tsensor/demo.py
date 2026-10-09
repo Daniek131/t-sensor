@@ -1,4 +1,4 @@
-"""Post clearly labeled synthetic telemetry to an already-running local API."""
+"""Send synthetic measurements to a running local telemetry API."""
 
 import argparse
 import os

@@ -1,4 +1,4 @@
-"""Protocol validation is separate from sensor-specific register assumptions."""
+"""Validate Modbus frames and decode the configured soil registers."""
 
 import os
 import struct
@@ -7,7 +7,7 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class SensorLayout:
-    # Confirm this register order and these units with the exact probe manual.
+    # Probe-specific register order and scales; verify against the sensor manual.
     registers: tuple[str, ...] = (
         "moisture",
         "temperature",
@@ -66,7 +66,7 @@ def decode_response(frame: bytes, address=1, layout: SensorLayout | None = None)
     if len(frame) != 19 or frame[1] != 3 or frame[2] != 14:
         raise ValueError("Expected function 03, 14 payload bytes, and a 19-byte frame")
     raw = dict(zip(layout.registers, struct.unpack(">7H", frame[3:17]), strict=True))
-    # Assumes the probe uses signed two's-complement temperature registers.
+    # This profile treats temperature as signed 16-bit two's complement.
     temperature = raw["temperature"]
     if temperature & 0x8000:
         temperature -= 65536

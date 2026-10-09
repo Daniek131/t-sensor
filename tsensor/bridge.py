@@ -1,4 +1,4 @@
-"""Forward firmware JSON lines to the API; the ESP32 needs no cloud credentials."""
+"""Forward ESP32 serial measurements to the telemetry API."""
 
 import argparse
 import json
@@ -13,7 +13,7 @@ from tsensor.schemas import ReadingInput
 
 
 def forward(client, url, payload):
-    # Preserve the timestamp across retries so the API can deduplicate this reading.
+    # I reuse the payload and timestamp on retries to avoid duplicate readings.
     for attempt in range(3):
         try:
             response = client.post(url, json=payload)

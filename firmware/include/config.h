@@ -1,7 +1,7 @@
 #pragma once
 #include <stdint.h>
 
-// Confirm pins, addressing, register order, and scales against your actual prototype.
+// UART and probe settings for the bench node; confirm the register profile before flashing.
 constexpr int SENSOR_RX_PIN = 16;
 constexpr int SENSOR_TX_PIN = 17;
 constexpr int RS485_DE_PIN = -1;  // -1 for an auto-direction module; otherwise wire DE and /RE.

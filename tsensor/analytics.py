@@ -1,4 +1,4 @@
-"""Exploratory trends, not validated nutrient or disease predictions."""
+"""Summarize soil trends with exploratory rules that need field calibration."""
 
 from datetime import datetime, timedelta, timezone
 

@@ -16,7 +16,7 @@ void setup() {
 }
 
 void loop() {
-    // Unsigned subtraction also works when millis() wraps around.
+    // I subtract unsigned timestamps so polling still works after millis() wraps.
     if (millis() - last_poll < POLL_INTERVAL_MS) return;
     last_poll = millis();
     while (sensor.available()) sensor.read();

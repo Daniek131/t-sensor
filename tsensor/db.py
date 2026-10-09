@@ -36,7 +36,7 @@ class Reading(Base):
     __tablename__ = "readings"
     __table_args__ = (
         ForeignKeyConstraint(["org_id", "device_id"], ["devices.org_id", "devices.id"]),
-        # The unique key also supplies the B-tree index for scoped time queries.
+        # I use one unique key for duplicate detection and device/time queries.
         UniqueConstraint("org_id", "device_id", "observed_at", name="uq_readings_device_time"),
         CheckConstraint("moisture >= 0 AND moisture <= 100 AND ph >= 0 AND ph <= 14"),
         CheckConstraint("temperature >= -50 AND temperature <= 100"),
